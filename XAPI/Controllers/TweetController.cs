@@ -123,7 +123,7 @@ namespace XAPI.Controllers
         }
 
         // localhost:5000/api/tweet/5 => DELETE
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] 
         public async Task<IActionResult> DeletePost(int id)
         {
             var tweet = await _context.Tweets.FirstOrDefaultAsync(i => i.TweetId == id);
