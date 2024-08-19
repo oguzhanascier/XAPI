@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using XAPI.Models;
 using XAPI.DTO;
@@ -22,7 +21,7 @@ namespace XAPI.Controllers
         public async Task<IActionResult> GetPosts()
         {
             var tweets = await _context.Tweets
-                .Include(t => t.User) 
+                .Include(t => t.User)
                 .Select(t => new TweetResponseDTO
                 {
                     TweetId = t.TweetId,
@@ -30,7 +29,7 @@ namespace XAPI.Controllers
                     Time = t.Time,
                     IsActive = t.IsActive,
                     UserId = t.UserId,
-                    UserName = t.User.UserName  
+                    UserName = t.User.UserName
                 })
                 .ToListAsync();
 
@@ -51,13 +50,13 @@ namespace XAPI.Controllers
                     t.Time,
                     t.IsActive,
                     t.UserId,
-                    UserName = t.User != null ? t.User.UserName : "Unknown" 
+                    UserName = t.User != null ? t.User.UserName : "Unknown"
                 })
                 .ToListAsync();
 
             if (!tweets.Any())
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return Ok(tweets);
@@ -69,7 +68,7 @@ namespace XAPI.Controllers
 
             if (tweetDto.UserId != currentUserId)
             {
-                return Unauthorized(); 
+                return Unauthorized();
             }
 
             var tweet = new Tweet
@@ -84,7 +83,7 @@ namespace XAPI.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPosts), new { id = tweet.TweetId }, tweet);
-        }
+        } 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePost(int id, [FromBody] TweetUpdateDto tweetDto)

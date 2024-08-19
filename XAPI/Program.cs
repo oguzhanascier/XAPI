@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(x => {
     x.TokenValidationParameters = new TokenValidationParameters 
     {
         ValidateIssuer = false,
-        ValidIssuer = "sadikturan.com",
+        ValidIssuer = "oguzhan.com",
         ValidateAudience = false,
         ValidAudience = "",
         ValidAudiences = new string[] { "a","b"},
