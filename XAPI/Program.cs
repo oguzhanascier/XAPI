@@ -35,12 +35,23 @@ builder.Services.AddAuthentication(x => {
         ValidIssuer = "oguzhan.com",
         ValidateAudience = false,
         ValidAudience = "",
-        ValidAudiences = new string[] { "a","b"},
+        ValidAudiences = new string[] { "a", "b"},
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
             builder.Configuration.GetSection("AppSettings:Secret").Value ?? "")),
         ValidateLifetime = true
     };
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 });
 
 builder.Services.AddControllers();
@@ -83,6 +94,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll"); // CORS politikası burada devreye giriyor
 app.UseAuthentication();
 app.UseAuthorization();
 

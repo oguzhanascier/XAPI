@@ -10,7 +10,7 @@ using XAPI.Models;
 namespace ProductsAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class UsersController: ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;

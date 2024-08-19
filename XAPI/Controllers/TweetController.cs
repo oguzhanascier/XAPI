@@ -7,7 +7,7 @@ using XAPI.DTO;
 namespace XAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class TweetController : ControllerBase
     {
         private readonly TweetContext _context;
