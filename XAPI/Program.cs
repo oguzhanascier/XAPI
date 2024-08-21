@@ -7,8 +7,11 @@ using Microsoft.OpenApi.Models;
 using XAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<TweetContext>(x => x.UseSqlite("Data Source=products.db"));
+builder.Services.AddDbContext<TweetContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<TweetContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>  {
@@ -35,23 +38,12 @@ builder.Services.AddAuthentication(x => {
         ValidIssuer = "oguzhan.com",
         ValidateAudience = false,
         ValidAudience = "",
-        ValidAudiences = new string[] { "a", "b"},
+        ValidAudiences = new string[] { "a","b"},
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
             builder.Configuration.GetSection("AppSettings:Secret").Value ?? "")),
         ValidateLifetime = true
     };
-});
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
 });
 
 builder.Services.AddControllers();
@@ -94,7 +86,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll"); // CORS politikası burada devreye giriyor
 app.UseAuthentication();
 app.UseAuthorization();
 
